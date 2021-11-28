@@ -1,0 +1,21 @@
+# version 1.x.x
+# dependencies
+/v1.x.x/node_modules
+/v1.x.x/.pnp
+/v1.x.x/.pnp.js
+
+# testing
+/v1.x.x/coverage
+
+# production
+/v1.x.x/build
+
+# misc
+/v1.x.x/.DS_Store
+/v1.x.x/.env.local
+/v1.x.x/.env.development.local
+/v1.x.x/.env.test.local
+/v1.x.x/.env.production.local
+/v1.x.x/npm-debug.log*
+/v1.x.x/yarn-debug.log*
+/v1.x.x/yarn-error.log*
