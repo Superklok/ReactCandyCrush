@@ -1,0 +1,24 @@
+body {
+	font-family: 'Passion One', cursive;
+	background-color: #0A8AD3;
+}
+
+h1 {
+	margin: 0;
+}
+
+.rccText {
+	color: transparent;
+	background-image: linear-gradient(180deg, #F4D348 43%, #D57F2C 100%);
+	background-clip: text;
+	font-size: 1.9rem;
+	word-spacing: -5px;
+	display: flex;
+	justify-content: center;
+}
+
+@supports (-webkit-text-stroke: 3px #401D21) {
+	.rccText {
+		-webkit-text-stroke: 3px #401D21;
+	}
+}

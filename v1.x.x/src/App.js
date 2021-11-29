@@ -1,7 +1,9 @@
+import Header from './components/Header';
+
 const App = () => {
 	return (
 		<div>
-			<h1>React Candy Crush</h1>
+			<Header />
 		</div>
 	);
 }
