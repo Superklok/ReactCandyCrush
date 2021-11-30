@@ -24,6 +24,20 @@ const GameBoard = () => {
 		}
 	}
 
+	// Check for a row of four matching candies
+	const matchRowFour = () => {
+		for (let i = 0; i < 64; i++) {
+			const rowFour     = [i, i + 1, i + 2, i + 3],
+				  candyChoice = currentCandyPattern[i],
+				  endOfRow    = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64];
+
+			if (endOfRow.includes(i)) continue;
+			if (rowFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
+				rowFour.forEach(candy => currentCandyPattern[candy] = '');
+			}
+		}
+	}
+
 	// Check for a column of three matching candies
 	const matchColThree = () => {
 		for (let i = 0; i < 47; i++) {
@@ -69,17 +83,18 @@ const GameBoard = () => {
 	}, []);
 
 	/* Eliminate columns of three and four matching candies &
-	   also eliminate rows of three matching candies */
+	   also eliminate rows of three and four matching candies */
 	useEffect(() => {
 		const timer = setInterval(() => {
 			matchColFour();
+			matchRowFour();
 			matchColThree();
 			matchRowThree();
 			setCurrentCandyPattern([...currentCandyPattern]);
 		}, 100);
 
 		return () => clearInterval(timer);
-	}, [matchColFour, matchColThree, matchRowThree, currentCandyPattern]);
+	}, [matchColFour, matchRowFour, matchColThree, matchRowThree, currentCandyPattern]);
 
 	return (
 		<div className='container'>
