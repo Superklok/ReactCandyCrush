@@ -1,4 +1,11 @@
 import {useState, useEffect} from 'react';
+import blueCandy from '../assets/img/candy/blueCandy.png';
+import redCandy from '../assets/img/candy/redCandy.png';
+import purpleCandy from '../assets/img/candy/purpleCandy.png';
+import orangeCandy from '../assets/img/candy/orangeCandy.png';
+import yellowCandy from '../assets/img/candy/yellowCandy.png';
+import greenCandy from '../assets/img/candy/greenCandy.png';
+import noCandy from '../assets/img/candy/noCandy.png';
 
 const GameBoard = () => {
 	const [currentCandyPattern, setCurrentCandyPattern]   = useState([]),
@@ -6,12 +13,12 @@ const GameBoard = () => {
 		  [currentReplacedCandy, setCurrentReplacedCandy] = useState(null),
 		  width                                           = 8,
 		  candyColors                                     = [
-																'blue',
-																'red',
-																'purple',
-																'orange',
-																'yellow',
-																'green',
+																blueCandy,
+																redCandy,
+																purpleCandy,
+																orangeCandy,
+																yellowCandy,
+																greenCandy,
 															];
 	
 	// Check for a column of four matching candies
@@ -21,7 +28,7 @@ const GameBoard = () => {
 				  candyChoice = currentCandyPattern[i];
 
 			if (colFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
-				colFour.forEach(candy => currentCandyPattern[candy] = '');
+				colFour.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
 		}
@@ -36,7 +43,7 @@ const GameBoard = () => {
 
 			if (endOfRow.includes(i)) continue;
 			if (rowFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
-				rowFour.forEach(candy => currentCandyPattern[candy] = '');
+				rowFour.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
 		}
@@ -49,7 +56,7 @@ const GameBoard = () => {
 				  candyChoice = currentCandyPattern[i];
 
 			if (colThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
-				colThree.forEach(candy => currentCandyPattern[candy] = '');
+				colThree.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
 		}
@@ -64,7 +71,7 @@ const GameBoard = () => {
 
 			if (endOfRow.includes(i)) continue;
 			if (rowThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
-				rowThree.forEach(candy => currentCandyPattern[candy] = '');
+				rowThree.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
 		}
@@ -76,14 +83,14 @@ const GameBoard = () => {
 			const topRow   = [0, 1, 2, 3, 4, 5, 6, 7],
 				  isTopRow = topRow.includes(i);
 
-			if (isTopRow && currentCandyPattern[i] === '') {
+			if (isTopRow && currentCandyPattern[i] === noCandy) {
 				let newCandy = Math.floor(Math.random() * candyColors.length);
 
 				currentCandyPattern[i] = candyColors[newCandy];
 			}
-			if ((currentCandyPattern[i + width]) === '') {
+			if ((currentCandyPattern[i + width]) === noCandy) {
 				currentCandyPattern[i + width] = currentCandyPattern[i];
-				currentCandyPattern[i] = '';
+				currentCandyPattern[i] = noCandy;
 			}
 		}
 	}
@@ -103,8 +110,8 @@ const GameBoard = () => {
 		const currentDraggedCandyId  = parseInt(currentDraggedCandy.getAttribute('data-id')),
 			  currentReplacedCandyId = parseInt(currentReplacedCandy.getAttribute('data-id'));
 
-		currentCandyPattern[currentReplacedCandyId] = currentDraggedCandy.style.backgroundColor;
-		currentCandyPattern[currentDraggedCandyId] = currentReplacedCandy.style.backgroundColor;
+		currentCandyPattern[currentReplacedCandyId] = currentDraggedCandy.getAttribute('src');
+		currentCandyPattern[currentDraggedCandyId] = currentReplacedCandy.getAttribute('src');
 		
 		const validMoves   = [
 								 currentDraggedCandyId - 1,
@@ -124,8 +131,8 @@ const GameBoard = () => {
 				setCurrentDraggedCandy(null);
 				setCurrentReplacedCandy(null);
 			} else {
-				currentCandyPattern[currentReplacedCandyId] = currentReplacedCandy.style.backgroundColor;
-				currentCandyPattern[currentDraggedCandyId] = currentDraggedCandy.style.backgroundColor;
+				currentCandyPattern[currentReplacedCandyId] = currentReplacedCandy.getAttribute('src');
+				currentCandyPattern[currentDraggedCandyId] = currentDraggedCandy.getAttribute('src');
 				setCurrentCandyPattern([...currentCandyPattern]);
 			}
 	}
@@ -169,7 +176,7 @@ const GameBoard = () => {
 				{currentCandyPattern.map((candyColor, index) => (
 					<img 
 						key={index}
-						style={{backgroundColor: candyColor}}
+						src={candyColor}
 						alt={candyColor}
 						data-id={index}
 						draggable={true}
