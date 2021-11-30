@@ -40,6 +40,10 @@ h1 {
 	height: 70px;
 }
 
+.scoreBoard {
+	padding-left: 25px;
+}
+
 .rccText {
 	color: transparent;
 	background-image: linear-gradient(180deg, #F4D348 43%, #D57F2C 100%);

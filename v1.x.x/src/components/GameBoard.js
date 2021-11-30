@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import ScoreBoard from './ScoreBoard';
 import blueCandy from '../assets/img/candy/blueCandy.png';
 import redCandy from '../assets/img/candy/redCandy.png';
 import purpleCandy from '../assets/img/candy/purpleCandy.png';
@@ -11,6 +12,7 @@ const GameBoard = () => {
 	const [currentCandyPattern, setCurrentCandyPattern]   = useState([]),
 		  [currentDraggedCandy, setCurrentDraggedCandy]   = useState(null),
 		  [currentReplacedCandy, setCurrentReplacedCandy] = useState(null),
+		  [currentScore, setCurrentScore]                 = useState(0),
 		  width                                           = 8,
 		  candyColors                                     = [
 																blueCandy,
@@ -25,9 +27,11 @@ const GameBoard = () => {
 	const matchColFour = () => {
 		for (let i = 0; i <= 39; i++) {
 			const colFour     = [i, i + width, i + width * 2, i + width * 3],
-				  candyChoice = currentCandyPattern[i];
+				  candyChoice = currentCandyPattern[i],
+				  isNoCandy   = currentCandyPattern[i] === noCandy;
 
-			if (colFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
+			if (colFour.every(candy => currentCandyPattern[candy] === candyChoice && !isNoCandy)) {
+				setCurrentScore((score) => score + 4);
 				colFour.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
@@ -39,10 +43,12 @@ const GameBoard = () => {
 		for (let i = 0; i < 64; i++) {
 			const rowFour     = [i, i + 1, i + 2, i + 3],
 				  candyChoice = currentCandyPattern[i],
-				  endOfRow    = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64];
+				  endOfRow    = [5, 6, 7, 13, 14, 15, 21, 22, 23, 29, 30, 31, 37, 38, 39, 45, 46, 47, 53, 54, 55, 62, 63, 64],
+				  isNoCandy   = currentCandyPattern[i] === noCandy;
 
 			if (endOfRow.includes(i)) continue;
-			if (rowFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
+			if (rowFour.every(candy => currentCandyPattern[candy] === candyChoice && !isNoCandy)) {
+				setCurrentScore((score) => score + 4);
 				rowFour.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
@@ -53,9 +59,11 @@ const GameBoard = () => {
 	const matchColThree = () => {
 		for (let i = 0; i <= 47; i++) {
 			const colThree    = [i, i + width, i + width * 2],
-				  candyChoice = currentCandyPattern[i];
+				  candyChoice = currentCandyPattern[i],
+				  isNoCandy   = currentCandyPattern[i] === noCandy;
 
-			if (colThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
+			if (colThree.every(candy => currentCandyPattern[candy] === candyChoice && !isNoCandy)) {
+				setCurrentScore((score) => score + 3);
 				colThree.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
@@ -67,10 +75,12 @@ const GameBoard = () => {
 		for (let i = 0; i < 64; i++) {
 			const rowThree    = [i, i + 1, i + 2],
 				  candyChoice = currentCandyPattern[i],
-				  endOfRow    = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64];
+				  endOfRow    = [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 63, 64],
+				  isNoCandy   = currentCandyPattern[i] === noCandy;
 
 			if (endOfRow.includes(i)) continue;
-			if (rowThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
+			if (rowThree.every(candy => currentCandyPattern[candy] === candyChoice && !isNoCandy)) {
+				setCurrentScore((score) => score + 3);
 				rowThree.forEach(candy => currentCandyPattern[candy] = noCandy);
 				return true;
 			}
@@ -106,7 +116,7 @@ const GameBoard = () => {
 	}
 
 	// Game control to replace candy
-	const dragEnd = (e) => {
+	const dragEnd = () => {
 		const currentDraggedCandyId  = parseInt(currentDraggedCandy.getAttribute('data-id')),
 			  currentReplacedCandyId = parseInt(currentReplacedCandy.getAttribute('data-id'));
 
@@ -189,6 +199,7 @@ const GameBoard = () => {
 					/>
 				))}
 			</div>
+			<ScoreBoard score={currentScore} />
 		</div>
 	);
 }
