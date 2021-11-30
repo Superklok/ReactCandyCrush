@@ -1,6 +1,11 @@
 body {
-	font-family: 'Passion One', cursive;
+	background-image: url('assets/img/ReactCandyCrushBG.png');
+	height: 100vh;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	background-color: #0A8AD3;
+	font-family: 'Passion One', cursive;
 	color: #FFF;
 }
 
