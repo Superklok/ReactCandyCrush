@@ -64,6 +64,24 @@ const GameBoard = () => {
 		}
 	}
 
+	// Shift candies downward and replenish the game board
+	const shiftDown = () => {
+		for (let i = 0; i < 64 - width; i++) {
+			const topRow   = [0, 1, 2, 3, 4, 5, 6, 7],
+				  isTopRow = topRow.includes(i);
+
+			if (isTopRow && currentCandyPattern[i] === '') {
+				let newCandy = Math.floor(Math.random() * candyColors.length);
+
+				currentCandyPattern[i] = candyColors[newCandy];
+			}
+			if ((currentCandyPattern[i + width]) === '') {
+				currentCandyPattern[i + width] = currentCandyPattern[i];
+				currentCandyPattern[i] = '';
+			}
+		}
+	}
+
 	// Populate a randomized game board
 	const createBoard = () => {
 		const candyPattern = [];
@@ -90,11 +108,12 @@ const GameBoard = () => {
 			matchRowFour();
 			matchColThree();
 			matchRowThree();
+			shiftDown();
 			setCurrentCandyPattern([...currentCandyPattern]);
 		}, 100);
 
 		return () => clearInterval(timer);
-	}, [matchColFour, matchRowFour, matchColThree, matchRowThree, currentCandyPattern]);
+	}, [matchColFour, matchRowFour, matchColThree, matchRowThree, shiftDown, currentCandyPattern]);
 
 	return (
 		<div className='container'>
