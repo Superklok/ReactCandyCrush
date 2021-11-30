@@ -1,25 +1,28 @@
 import {useState, useEffect} from 'react';
 
 const GameBoard = () => {
-	const [currentCandyPattern, setCurrentCandyPattern] = useState([]),
-		  width                                         = 8,
-		  candyColors                                   = [
-															  'blue',
-															  'red',
-															  'purple',
-															  'orange',
-															  'yellow',
-															  'green',
-														  ];
+	const [currentCandyPattern, setCurrentCandyPattern]   = useState([]),
+		  [currentDraggedCandy, setCurrentDraggedCandy]   = useState(null),
+		  [currentReplacedCandy, setCurrentReplacedCandy] = useState(null),
+		  width                                           = 8,
+		  candyColors                                     = [
+																'blue',
+																'red',
+																'purple',
+																'orange',
+																'yellow',
+																'green',
+															];
 	
 	// Check for a column of four matching candies
 	const matchColFour = () => {
-		for (let i = 0; i < 39; i++) {
+		for (let i = 0; i <= 39; i++) {
 			const colFour     = [i, i + width, i + width * 2, i + width * 3],
 				  candyChoice = currentCandyPattern[i];
 
 			if (colFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
 				colFour.forEach(candy => currentCandyPattern[candy] = '');
+				return true;
 			}
 		}
 	}
@@ -34,18 +37,20 @@ const GameBoard = () => {
 			if (endOfRow.includes(i)) continue;
 			if (rowFour.every(candy => currentCandyPattern[candy] === candyChoice)) {
 				rowFour.forEach(candy => currentCandyPattern[candy] = '');
+				return true;
 			}
 		}
 	}
 
 	// Check for a column of three matching candies
 	const matchColThree = () => {
-		for (let i = 0; i < 47; i++) {
+		for (let i = 0; i <= 47; i++) {
 			const colThree    = [i, i + width, i + width * 2],
 				  candyChoice = currentCandyPattern[i];
 
 			if (colThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
 				colThree.forEach(candy => currentCandyPattern[candy] = '');
+				return true;
 			}
 		}
 	}
@@ -60,13 +65,14 @@ const GameBoard = () => {
 			if (endOfRow.includes(i)) continue;
 			if (rowThree.every(candy => currentCandyPattern[candy] === candyChoice)) {
 				rowThree.forEach(candy => currentCandyPattern[candy] = '');
+				return true;
 			}
 		}
 	}
 
 	// Shift candies downward and replenish the game board
 	const shiftDown = () => {
-		for (let i = 0; i < 64 - width; i++) {
+		for (let i = 0; i <= 55; i++) {
 			const topRow   = [0, 1, 2, 3, 4, 5, 6, 7],
 				  isTopRow = topRow.includes(i);
 
@@ -80,6 +86,48 @@ const GameBoard = () => {
 				currentCandyPattern[i] = '';
 			}
 		}
+	}
+
+	// Game control to drag candy
+	const dragStart = (e) => {
+		setCurrentDraggedCandy(e.target);
+	}
+
+	// Game control to drop candy
+	const dragDrop = (e) => {
+		setCurrentReplacedCandy(e.target);
+	}
+
+	// Game control to replace candy
+	const dragEnd = (e) => {
+		const currentDraggedCandyId  = parseInt(currentDraggedCandy.getAttribute('data-id')),
+			  currentReplacedCandyId = parseInt(currentReplacedCandy.getAttribute('data-id'));
+
+		currentCandyPattern[currentReplacedCandyId] = currentDraggedCandy.style.backgroundColor;
+		currentCandyPattern[currentDraggedCandyId] = currentReplacedCandy.style.backgroundColor;
+		
+		const validMoves   = [
+								 currentDraggedCandyId - 1,
+								 currentDraggedCandyId - width,
+								 currentDraggedCandyId + 1,
+								 currentDraggedCandyId + width,
+							 ],
+			  validMove    = validMoves.includes(currentReplacedCandyId),
+			  isColFour    = matchColFour(),
+			  isRowFour    = matchRowFour(),
+			  isColThree   = matchColThree(),
+			  isRowThree   = matchRowThree();
+
+		if (currentReplacedCandyId && 
+			validMove && 
+			(isColFour || isRowFour || isColThree || isRowThree)) {
+				setCurrentDraggedCandy(null);
+				setCurrentReplacedCandy(null);
+			} else {
+				currentCandyPattern[currentReplacedCandyId] = currentReplacedCandy.style.backgroundColor;
+				currentCandyPattern[currentDraggedCandyId] = currentDraggedCandy.style.backgroundColor;
+				setCurrentCandyPattern([...currentCandyPattern]);
+			}
 	}
 
 	// Populate a randomized game board
@@ -123,6 +171,14 @@ const GameBoard = () => {
 						key={index}
 						style={{backgroundColor: candyColor}}
 						alt={candyColor}
+						data-id={index}
+						draggable={true}
+						onDragStart={dragStart}
+						onDragOver={(e) => e.preventDefault()}
+						onDragEnter={(e) => e.preventDefault()}
+						onDragLeave={(e) => e.preventDefault()}
+						onDrop={dragDrop}
+						onDragEnd={dragEnd}
 					/>
 				))}
 			</div>
