@@ -13,10 +13,13 @@ h1 {
 	margin: 0;
 }
 
+h2 {
+	margin: 10px;
+}
+
 .container {
 	display: flex;
 	padding: 30px;
-	display: flex;
 	justify-content: center;
 }
 
@@ -41,7 +44,15 @@ h1 {
 }
 
 .scoreBoard {
-	padding-left: 25px;
+	background-color: rgb(84,102,138,0.9);
+	width: 560px;
+	margin-top: 35px;
+	border-radius: 10px;
+	border-width: 5px 3px 2px 4px;
+	border-style: solid;
+	border-color: rgb(74,90,123,0.9);
+	box-shadow: inset 0 0 15px rgb(84,102,138,0.9),
+				0 0 15px rgb(74,90,123,0.9);
 }
 
 .rccText {

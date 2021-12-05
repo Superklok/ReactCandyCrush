@@ -198,8 +198,10 @@ const GameBoard = () => {
 						onDragEnd={dragEnd}
 					/>
 				))}
+				<div className='scoreBoard'>
+					<ScoreBoard score={currentScore} />
+				</div>
 			</div>
-			<ScoreBoard score={currentScore} />
 		</div>
 	);
 }

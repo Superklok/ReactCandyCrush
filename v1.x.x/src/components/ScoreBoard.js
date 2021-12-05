@@ -1,6 +1,6 @@
 const ScoreBoard = ({score}) => {
 	return (
-		<div className='scoreBoard'>
+		<div>
 			<h2 className='rccText'>Score : {score}</h2>
 		</div>
 	);
